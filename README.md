@@ -13,14 +13,14 @@ Pantry Assistant is a Next.js application that helps you manage your pantry by a
 - **Add Items**: Easily add new items to your pantry inventory.
 - **Remove Items**: Remove items from your pantry when they are used or expired.
 - **Search**: Quickly search through your pantry to find items.
-- **Recipe Generation**: Get recipe suggestions based on the ingredients you have in your pantry using LLaMA 3.1 8B.
+- **Recipe Generation**: Get recipe suggestions based on the ingredients you have in your pantry using Gemini 1.5 Pro LLaMA 3.1 8B.
 - **Planned Updates**: Integration of object detection to automatically add items from pictures.
 
 ## Technologies Used
 
 - **Next.js**: A React framework for server-side rendering and static site generation.
 - **Firebase**: For user authentication and database management.
-- **LLaMA 3.1 8B**: To generate recipes based on pantry contents.
+- **Gemini 1.5 Pro & LLaMA 3.1 8B**: To generate recipes based on pantry contents.
 - **Material-UI**: For the application's UI components.
 
 ## Getting Started

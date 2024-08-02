@@ -49,7 +49,7 @@ const RecipeRequest = ({ pantry }) => {
         disabled={loading}
         sx={{ mb: 2 }}
       >
-        {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Generate Recipe'}
+        {loading ? <CircularProgress size={24} sx={{ color: 'blue' }} /> : 'Generate Recipe'}
       </Button>
       {error && (
         <Box mt={2}>
