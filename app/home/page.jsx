@@ -1,8 +1,8 @@
-"use client";
+"use client"
 import { useState, useEffect } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import { firestore } from '../firebase/config';
-import { collection, query, doc, getDocs, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import { collection, query, doc, getDocs, setDoc, deleteDoc, getDoc, writeBatch } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/config';
 import { useRouter } from 'next/navigation';
@@ -102,6 +102,17 @@ export default function Home() {
 
   const handleSignOut = async () => {
     try {
+      if (user.isAnonymous) {
+        // Delete all pantry items for anonymous users
+        console.log('deleting for anon');
+        const batch = writeBatch(firestore);
+        const snapshot = query(collection(firestore, 'users', user.uid, 'pantry'));
+        const docs = await getDocs(snapshot);
+        docs.forEach((doc) => {
+          batch.delete(doc.ref);
+        });
+        await batch.commit();
+      }
       await signOut(auth);
       router.push('/login');
     } catch (error) {
