@@ -22,7 +22,8 @@ export async function POST(req: Request) {
     const { items } = body; // Expecting an array of items
 
     const prompt = `Create a recipe using the following ingredients: ${items.join(', ')}. Include as many listed ingredients as possible, 
-    and avoid adding any extra ingredients, unless they are optional. If some ingredients can’t be used, omit them without mentioning limitations. Provide clear, complete instructions.`;
+    and avoid adding any extra ingredients, unless they are optional. You can also add salt & pepper, maybe other basic seasonings if need be. 
+    If some ingredients can’t be used, omit them without mentioning limitations. Provide clear, complete instructions.`;
 
     const chatSession = model.startChat({
       generationConfig,
