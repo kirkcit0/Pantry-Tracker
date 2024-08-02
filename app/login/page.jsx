@@ -1,11 +1,11 @@
 "use client";
 import { useState } from 'react';
-import { Box, Button, TextField, Typography, Avatar, IconButton } from '@mui/material';
+import { Box, Button, TextField, Typography, Avatar, IconButton, CircularProgress } from '@mui/material';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
 import { useRouter } from 'next/navigation';
 import { Google as GoogleIcon } from '@mui/icons-material';
-import { signInWithPopup, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 const darkModeStyles = {
   backgroundColor: '#121212',
@@ -30,8 +30,8 @@ const iconStyle = {
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
+  const [loading, setLoading] = useState(false);
+  const [signInWithEmailAndPassword, user, loadingAuth, error] = useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle, googleUser] = useSignInWithGoogle(auth);
   const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
@@ -42,17 +42,24 @@ export default function Login() {
 
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
-    await signInWithEmailAndPassword(email, password);
-    if (user) {
-      router.push('/');
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(email, password);
+      if (user) {
+        router.push('/home');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
+    setLoading(true);
     await signInWithGoogle();
     if (googleUser) {
-      router.push('/');
+      router.push('/home');
     }
+    setLoading(false);
   };
 
   const handlePhoneSignIn = async () => {
@@ -61,7 +68,7 @@ export default function Login() {
       const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
       const verificationCode = window.prompt('Please enter the verification code that was sent to your phone.');
       await confirmationResult.confirm(verificationCode);
-      router.push('/');
+      router.push('/home');
     } catch (error) {
       console.error('Error signing in with phone number:', error.message);
     }
@@ -104,8 +111,8 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }}>
-          Login
+        <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }} disabled={loading}>
+          {loading ? <CircularProgress size={24} /> : 'Login'}
         </Button>
         <Button
           variant="text"
@@ -122,7 +129,7 @@ export default function Login() {
           Don&apos;t have an account? Sign Up
         </Button>
         <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center'}}>
-          <IconButton onClick={handleGoogleSignIn} sx={iconStyle}>
+          <IconButton onClick={handleGoogleSignIn} sx={iconStyle} disabled={loading}>
             <GoogleIcon />
           </IconButton>
           <div id="recaptcha-container"></div>

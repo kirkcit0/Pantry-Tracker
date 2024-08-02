@@ -2,11 +2,12 @@
 import { useState } from 'react';
 import { useCreateUserWithEmailAndPassword, useSendEmailVerification } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
-import { Box, Button, TextField, Typography, IconButton } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { Google as GoogleIcon, Phone as PhoneIcon } from '@mui/icons-material';
-import { sendEmailVerification } from 'firebase/auth';
-import { signInWithPopup, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import ThemeToggle from '../components/ThemeToggle';
+import SignupForm from '../components/SignupForm';
+import AuthButtons from '../components/AuthButtons';
+import { GoogleAuthProvider, RecaptchaVerifier, signInWithPopup, signInWithPhoneNumber } from 'firebase/auth';
 
 const darkModeStyles = {
   backgroundColor: '#121212',
@@ -16,16 +17,6 @@ const darkModeStyles = {
 const lightModeStyles = {
   backgroundColor: '#ffffff',
   color: '#000000',
-};
-
-const iconStyle = {
-  width: 48,
-  height: 48,
-  borderRadius: '50%',
-  backgroundColor: '#f5f5f5',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
 };
 
 export default function Signup() {
@@ -51,7 +42,7 @@ export default function Signup() {
         setEmail('');
         setPassword('');
         setConfirmPassword('');
-        window.location.href = '/login';
+        router.push('/login');
       } catch (err) {
         console.error('Error signing up:', err.message);
       }
@@ -61,7 +52,7 @@ export default function Signup() {
   const handleGoogleSignUp = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
-    router.push('/');
+    router.push('/home');
   };
 
   const handlePhoneSignUp = async () => {
@@ -70,7 +61,7 @@ export default function Signup() {
       const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
       const verificationCode = window.prompt('Please enter the verification code that was sent to your phone.');
       await confirmationResult.confirm(verificationCode);
-      router.push('/');
+      router.push('/home');
     } catch (error) {
       console.error('Error signing up with phone number:', error.message);
     }
@@ -89,67 +80,30 @@ export default function Signup() {
         ...(darkMode ? darkModeStyles : lightModeStyles),
       }}
     >
-      <Button variant="outlined" onClick={toggleTheme} sx={{ mb: 2 }}>
-        Toggle Dark Mode
-      </Button>
+      <ThemeToggle darkMode={darkMode} toggleTheme={toggleTheme} />
       <Typography variant='h4' sx={{ mb: 2 }}>
         Sign Up
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: '400px' }}>
-        <TextField
-          label="Email"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <TextField
-          label="Confirm Password"
-          type="password"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }}>
-          Sign Up
-        </Button>
-        <Button
-          variant="text"
-          onClick={() => router.push('/login')}
-          sx={{ mt: 2 }}
-        >
-          Already have an account? Login
-        </Button>
-        <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center'}}>
-          <IconButton onClick={handleGoogleSignUp} sx={iconStyle}>
-            <GoogleIcon />
-          </IconButton>
-          {/* <TextField
-            label="Phone Number"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-          <IconButton onClick={handlePhoneSignUp} sx={iconStyle}>
-            <PhoneIcon />
-          </IconButton> */}
-          <div id="recaptcha-container"></div>
-        </Box>
-      </Box>
+      <SignupForm
+        handleSubmit={handleSubmit}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        confirmPassword={confirmPassword}
+        setConfirmPassword={setConfirmPassword}
+      />
+      <Button
+        variant="text"
+        onClick={() => router.push('/login')}
+        sx={{ mt: 2 }}
+      >
+        Already have an account? Login
+      </Button>
+      <AuthButtons
+        handleGoogleSignUp={handleGoogleSignUp}
+        handlePhoneSignUp={handlePhoneSignUp}
+      />
     </Box>
   );
 }
