@@ -104,7 +104,6 @@ export default function Home() {
     try {
       if (user.isAnonymous) {
         // Delete all pantry items for anonymous users
-        console.log('deleting for anon');
         const batch = writeBatch(firestore);
         const snapshot = query(collection(firestore, 'users', user.uid, 'pantry'));
         const docs = await getDocs(snapshot);
