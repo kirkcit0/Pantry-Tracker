@@ -61,7 +61,7 @@ export default function Signup() {
   const handleGoogleSignUp = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
-    router.push('/home');
+    router.push('/');
   };
 
   const handlePhoneSignUp = async () => {
@@ -70,7 +70,7 @@ export default function Signup() {
       const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
       const verificationCode = window.prompt('Please enter the verification code that was sent to your phone.');
       await confirmationResult.confirm(verificationCode);
-      router.push('/home');
+      router.push('/');
     } catch (error) {
       console.error('Error signing up with phone number:', error.message);
     }
@@ -132,11 +132,11 @@ export default function Signup() {
         >
           Already have an account? Login
         </Button>
-        <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+        <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center'}}>
           <IconButton onClick={handleGoogleSignUp} sx={iconStyle}>
             <GoogleIcon />
           </IconButton>
-          <TextField
+          {/* <TextField
             label="Phone Number"
             variant="outlined"
             fullWidth
@@ -146,7 +146,7 @@ export default function Signup() {
           />
           <IconButton onClick={handlePhoneSignUp} sx={iconStyle}>
             <PhoneIcon />
-          </IconButton>
+          </IconButton> */}
           <div id="recaptcha-container"></div>
         </Box>
       </Box>

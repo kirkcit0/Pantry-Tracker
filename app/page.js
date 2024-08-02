@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Box, Stack, Typography, Button, Modal, TextField, IconButton } from '@mui/material';
+import { Box, Stack, Typography, Button, Modal, TextField, IconButton, CircularProgress } from '@mui/material';
 import { firestore } from './firebase/config';
 import { collection, query, doc, getDocs, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -50,7 +50,10 @@ export default function Home() {
     updatePantry();
   }, []);
 
+  const [loading, setLoading] = useState(true);
+
   const updatePantry = async () => {
+    setLoading(true);
     try {
       const snapshot = query(collection(firestore, 'pantry'));
       const docs = await getDocs(snapshot);
@@ -61,8 +64,11 @@ export default function Home() {
       setPantry(pantryList);
     } catch (error) {
       console.error("Error fetching pantry items: ", error);
+    } finally {
+      setLoading(false);
     }
   };
+
 
   const addItem = async (item) => {
     try {
