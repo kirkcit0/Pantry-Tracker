@@ -11,6 +11,8 @@ import ThemeToggle from '../components/ThemeToggle';
 import SearchAndActionBar from '../components/SearchAndActionBar';
 import AddItemModal from '../components/AddItemModal';
 import PantryList from '../components/PantryList';
+import RecipeRequest from '../components/RecipeRequest';
+import RateLimitChecker from '../components/RateLimitChecker';
 
 const darkModeStyles = {
     backgroundColor: '#121212', // Dark background
@@ -137,6 +139,8 @@ export default function Home() {
         setItemName={setItemName}
         addItem={addItem}
       />
+      <RecipeRequest pantry={pantry} />
+      <RateLimitChecker />
       {loading ? (
         <CircularProgress />
       ) : (
