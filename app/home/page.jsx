@@ -4,7 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { firestore } from '../firebase/config';
 import { collection, query, doc, getDocs, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/firebase/config';
+import { auth } from '../firebase/config';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import ThemeToggle from '../components/ThemeToggle';
@@ -12,7 +12,6 @@ import SearchAndActionBar from '../components/SearchAndActionBar';
 import AddItemModal from '../components/AddItemModal';
 import PantryList from '../components/PantryList';
 import RecipeRequest from '../components/RecipeRequest';
-import RateLimitChecker from '../components/RateLimitChecker';
 
 const darkModeStyles = {
     backgroundColor: '#121212', // Dark background
@@ -140,7 +139,6 @@ export default function Home() {
         addItem={addItem}
       />
       <RecipeRequest pantry={pantry} />
-      <RateLimitChecker />
       {loading ? (
         <CircularProgress />
       ) : (

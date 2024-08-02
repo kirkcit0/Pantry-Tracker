@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Box, Button, TextField, Typography, Avatar, IconButton, CircularProgress } from '@mui/material';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/firebase/config';
+import { auth } from '../firebase/config';
 import { useRouter } from 'next/navigation';
 import { Google as GoogleIcon } from '@mui/icons-material';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';

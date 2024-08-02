@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { useCreateUserWithEmailAndPassword, useSendEmailVerification } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/firebase/config';
+import { auth } from '../firebase/config';
 import { Box, Typography, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from '../components/ThemeToggle';
