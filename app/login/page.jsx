@@ -1,6 +1,6 @@
 "use client";
-import { useState } from 'react';
-import { Box, Button, TextField, Typography, Avatar, IconButton, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Button, TextField, Typography, IconButton, CircularProgress, Alert } from '@mui/material';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/config';
 import { useRouter } from 'next/navigation';
@@ -27,14 +27,36 @@ const iconStyle = {
   alignItems: 'center',
 };
 
+const errorMessages = {
+  'auth/invalid-email': 'Invalid email address.',
+  'auth/user-not-found': 'No user found with this email.',
+  'auth/wrong-password': 'Incorrect password.',
+  'auth/user-disabled': 'User account is disabled.',
+  'auth/too-many-requests': 'Too many login attempts. Try again later.',
+  'auth/network-request-failed': 'Network error. Please try again.',
+};
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [signInWithEmailAndPassword, user, loadingAuth, error] = useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle, googleUser] = useSignInWithGoogle(auth);
   const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (user || googleUser) {
+      router.push('/home');
+    }
+  }, [user, googleUser, router]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(errorMessages[error.code] || 'Invalid login, please try again.');
+    }
+  }, [error]);
 
   const toggleTheme = () => {
     setDarkMode((prevMode) => !prevMode);
@@ -43,11 +65,9 @@ export default function Login() {
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage('');
     try {
       await signInWithEmailAndPassword(email, password);
-      if (user) {
-        router.push('/home');
-      }
     } finally {
       setLoading(false);
     }
@@ -56,9 +76,6 @@ export default function Login() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     await signInWithGoogle();
-    if (googleUser) {
-      router.push('/home');
-    }
     setLoading(false);
   };
 
@@ -94,6 +111,11 @@ export default function Login() {
         Login
       </Typography>
       <Box component="form" onSubmit={handleEmailSignIn} sx={{ width: '100%', maxWidth: '400px' }}>
+        {errorMessage && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
         <TextField
           label="Email"
           variant="outlined"
