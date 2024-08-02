@@ -29,16 +29,16 @@ const RecipeRequest = ({ pantry }) => {
       setRecipe(formattedRecipe);
     } catch (error) {
       console.error('Error requesting recipe:', error);
-      setError('Failed to fetch recipe.');
+      setError('Failed to generate recipe, try again later!');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box>
+    <Box display='flex' flexDirection='column'>
       <Button variant="contained" onClick={handleRequestRecipe} disabled={loading}>
-        {loading ? 'Loading...' : 'Get Recipe'}
+        {loading ? 'Loading...' : 'Generate Recipe'}
       </Button>
       {error && (
         <Box mt={2}>
