@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Here's a README for your Next.js app:
+
+---
+
+# Pantry Assistant
+
+## Overview
+
+Pantry Assistant is a Next.js application that helps you manage your pantry by allowing you to add, remove, and search through items. The app connects to LLaMA 3.1 8B to generate recipes based on the items in your pantry, making meal planning easier and more efficient. Future updates will include object detection capabilities to automatically add pantry items from pictures.
+
+## Features
+
+- **Add Items**: Easily add new items to your pantry inventory.
+- **Remove Items**: Remove items from your pantry when they are used or expired.
+- **Search**: Quickly search through your pantry to find items.
+- **Recipe Generation**: Get recipe suggestions based on the ingredients you have in your pantry using LLaMA 3.1 8B.
+- **Planned Updates**: Integration of object detection to automatically add items from pictures.
+
+## Technologies Used
+
+- **Next.js**: A React framework for server-side rendering and static site generation.
+- **Firebase**: For user authentication and database management.
+- **LLaMA 3.1 8B**: To generate recipes based on pantry contents.
+- **Material-UI**: For the application's UI components.
 
 ## Getting Started
 
-First, run the development server:
+To get started with the Pantry Assistant app, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the Repository**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   git clone https://github.com/your-username/pantry-assistant.git
+   cd pantry-assistant
+   ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+2. **Install Dependencies**
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   Make sure you have [Node.js](https://nodejs.org/) installed, then run:
 
-## Learn More
+   ```bash
+   npm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. **Set Up Firebase**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   - Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+   - Add Firebase configuration to your project. Update `firebase/config.js` with your Firebase project credentials.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+4. **Set Up Environment Variables**
 
-## Deploy on Vercel
+   Create a `.env.local` file in the root of the project and add your environment variables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+   OPENROUTER_API_KEY=you-openrouter-api-key
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+5. **Run the Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open `http://localhost:3000` in your browser to view the app.
+
+## Usage
+
+1. **Adding Items**: Use the interface to input and add new items to your pantry.
+2. **Removing Items**: Select items from your pantry list to remove them.
+3. **Searching**: Use the search functionality to find specific items in your pantry.
+4. **Recipe Generation**: View recipe suggestions based on the current items in your pantry.
+
+## Planned Updates
+
+- **Object Detection**: Integration of object detection to automatically add pantry items from pictures.
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions or find issues, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+For any questions or feedback, feel free to contact [lefevrekirk@gmail.com](mailto:lefevrekirk@gmail.com).
