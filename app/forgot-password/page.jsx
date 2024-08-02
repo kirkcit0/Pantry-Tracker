@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAuth, confirmPasswordReset } from 'firebase/auth';
 import { Box, Button, TextField, Typography } from '@mui/material';
@@ -15,7 +15,7 @@ const lightModeStyles = {
   color: '#000000',
 };
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [darkMode, setDarkMode] = useState(false);
@@ -86,5 +86,13 @@ export default function ResetPassword() {
         </Button>
       </Box>
     </Box>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }

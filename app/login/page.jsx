@@ -4,8 +4,8 @@ import { Box, Button, TextField, Typography, Avatar, IconButton } from '@mui/mat
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
 import { useRouter } from 'next/navigation';
-import { Google as GoogleIcon, Phone as PhoneIcon } from '@mui/icons-material';
-import { signInWithPopup, GoogleAuthProvider, signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
+import { Google as GoogleIcon } from '@mui/icons-material';
+import { signInWithPopup, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 const darkModeStyles = {
   backgroundColor: '#121212',
