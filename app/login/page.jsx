@@ -119,23 +119,12 @@ export default function Login() {
           onClick={() => router.push('/signup')}
           sx={{ mt: 2 }}
         >
-          Don't have an account? Sign Up
+          Don&apos;t have an account? Sign Up
         </Button>
         <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center'}}>
           <IconButton onClick={handleGoogleSignIn} sx={iconStyle}>
             <GoogleIcon />
           </IconButton>
-          {/* <TextField
-            label="Phone Number"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-          <IconButton onClick={handlePhoneSignIn} sx={iconStyle}>
-            <PhoneIcon />
-          </IconButton> */}
           <div id="recaptcha-container"></div>
         </Box>
       </Box>
