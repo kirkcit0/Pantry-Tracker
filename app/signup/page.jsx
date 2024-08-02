@@ -5,7 +5,7 @@ import { auth } from '@/app/firebase/config';
 import { Box, Typography, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from '../components/ThemeToggle';
-import SignupForm from '../components/SignupForm';
+import SignupForm from '../components/SignUpForm';
 import AuthButtons from '../components/AuthButtons';
 import { GoogleAuthProvider, RecaptchaVerifier, signInWithPopup, signInWithPhoneNumber } from 'firebase/auth';
 

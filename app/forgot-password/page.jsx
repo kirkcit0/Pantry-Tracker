@@ -1,48 +1,56 @@
 "use client";
-import { useState, Suspense } from 'react';
-import { Box, Typography } from '@mui/material';
-import ThemeToggle from '../components/ThemeToggle';
-import ResetPasswordForm from '../components/ResetPasswordForm';
+import { useState } from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
-const darkModeStyles = {
-  backgroundColor: '#121212',
-  color: '#ffffff',
-};
+export default function ResetPassword() {
+  const [email, setEmail] = useState('');
+  const router = useRouter();
 
-const lightModeStyles = {
-  backgroundColor: '#ffffff',
-  color: '#000000',
-};
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    // Implement your password reset logic here
+    console.log("Password reset requested for:", email);
+    // After successful password reset, navigate to login page
+    router.push('/login');
+  };
 
-const ResetPasswordPage = () => {
-  const [darkMode, setDarkMode] = useState(false);
-
-  const toggleTheme = () => {
-    setDarkMode((prevMode) => !prevMode);
+  const handleBack = () => {
+    router.push('/login'); // Navigate to login page
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Box
-        sx={{
-          width: '100vw',
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          p: 2,
-          ...(darkMode ? darkModeStyles : lightModeStyles),
-        }}
-      >
-        <ThemeToggle darkMode={darkMode} toggleTheme={toggleTheme} />
-        <Typography variant='h4' sx={{ mb: 2 }}>
+    <Box
+      sx={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        p: 2,
+        // Apply darkMode or lightMode styles if needed
+      }}
+    >
+      <Typography variant='h4' sx={{ mb: 2 }}>
+        Reset Password
+      </Typography>
+      <Box component="form" onSubmit={handleResetPassword} sx={{ width: '100%', maxWidth: '400px' }}>
+        <TextField
+          label="Email"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }}>
           Reset Password
-        </Typography>
-        <ResetPasswordForm darkMode={darkMode} />
+        </Button>
+        <Button variant="text" onClick={handleBack} sx={{ mb: 2 }} >
+          Back to Login
+        </Button>
       </Box>
-    </Suspense>
+    </Box>
   );
-};
-
-export default ResetPasswordPage;
+}
