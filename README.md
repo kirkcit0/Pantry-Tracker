@@ -79,6 +79,7 @@ To get started with the Pantry Assistant app, follow these steps:
 ## Planned Updates
 
 - **Object Detection**: Integration of object detection to automatically add pantry items from pictures.
+- **UI Updates**: The current UI uses basic materialUI. Functionality has been a focus, but this will be updated.
 
 ## Contributing
 
