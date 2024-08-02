@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Box, Button, TextField, Typography, IconButton, CircularProgress, Alert } from '@mui/material';
+import { Box, Button, TextField, Typography, CircularProgress, Alert } from '@mui/material';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/config';
 import { useRouter } from 'next/navigation';
-import { Google as GoogleIcon } from '@mui/icons-material';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import AuthButtons from '../components/AuthButtons';
+import { GoogleAuthProvider, RecaptchaVerifier, signInWithPopup, signInWithPhoneNumber, signInAnonymously } from 'firebase/auth';
 
 const darkModeStyles = {
   backgroundColor: '#121212',
@@ -47,9 +47,21 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user || googleUser) {
-      router.push('/home');
-    }
+    const checkVerification = async () => {
+      if (user) {
+        const userEmailVerified = auth.currentUser?.emailVerified;
+        if (userEmailVerified) {
+          router.push('/home');
+        } else {
+          setErrorMessage('Please verify your email before logging in.');
+          await auth.signOut(); // Log out the user if not verified
+        }
+      }
+      if (googleUser) {
+        router.push('/home');
+      }
+    };
+    checkVerification();
   }, [user, googleUser, router]);
 
   useEffect(() => {
@@ -67,16 +79,29 @@ export default function Login() {
     setLoading(true);
     setErrorMessage('');
     try {
-      await signInWithEmailAndPassword(email, password);
+      const result = await signInWithEmailAndPassword(email, password);
+      if (result.user && !result.user.emailVerified) {
+        setErrorMessage('Please verify your email before logging in.');
+        await auth.signOut(); // Log out the user if not verified
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setLoading(true);
-    await signInWithGoogle();
-    setLoading(false);
+  const handleGoogleAuth = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    router.push('/home');
+  };
+  
+  const handleAnonAuth = async () => {
+    try {
+      await signInAnonymously(auth);
+      router.push('/home');
+    } catch (error) {
+      console.error('Error signing in anonymously:', error.message);
+    }
   };
 
   const handlePhoneSignIn = async () => {
@@ -150,12 +175,10 @@ export default function Login() {
         >
           Don&apos;t have an account? Sign Up
         </Button>
-        <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center'}}>
-          <IconButton onClick={handleGoogleSignIn} sx={iconStyle} disabled={loading}>
-            <GoogleIcon />
-          </IconButton>
-          <div id="recaptcha-container"></div>
-        </Box>
+        <AuthButtons
+          handleGoogleAuth={handleGoogleAuth}
+          handleAnonAuth={handleAnonAuth}
+        />
       </Box>
     </Box>
   );

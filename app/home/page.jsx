@@ -14,19 +14,18 @@ import PantryList from '../components/PantryList';
 import RecipeRequest from '../components/RecipeRequest';
 
 const darkModeStyles = {
-    backgroundColor: '#121212', // Dark background
-    color: '#ffffff',           // Light text
-    borderColor: '#333333',     // Darker borders
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', // Dark shadow for elements
-  };
+  backgroundColor: '#121212',
+  color: '#ffffff',
+  borderColor: '#333333',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+};
 
-  const lightModeStyles = {
-    backgroundColor: '#ffffff', // Light background
-    color: '#000000',           // Dark text
-    borderColor: '#cccccc',     // Lighter borders
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Lighter shadow for elements
-  };
-  
+const lightModeStyles = {
+  backgroundColor: '#ffffff',
+  color: '#000000',
+  borderColor: '#cccccc',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+};
 
 export default function Home() {
   const [user] = useAuthState(auth);
@@ -45,13 +44,15 @@ export default function Home() {
   }, [user, router]);
 
   useEffect(() => {
-    updatePantry();
-  }, []);
+    if (user) {
+      updatePantry();
+    }
+  }, [user]);
 
   const updatePantry = async () => {
     setLoading(true);
     try {
-      const snapshot = query(collection(firestore, 'pantry'));
+      const snapshot = query(collection(firestore, 'users', user.uid, 'pantry'));
       const docs = await getDocs(snapshot);
       const pantryList = [];
       docs.forEach((doc) => {
@@ -67,7 +68,7 @@ export default function Home() {
 
   const addItem = async (item) => {
     try {
-      const docRef = doc(collection(firestore, 'pantry'), item);
+      const docRef = doc(collection(firestore, 'users', user.uid, 'pantry'), item);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const { count } = docSnap.data();
@@ -83,7 +84,7 @@ export default function Home() {
 
   const removeItem = async (item) => {
     try {
-      const docRef = doc(collection(firestore, 'pantry'), item);
+      const docRef = doc(collection(firestore, 'users', user.uid, 'pantry'), item);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const { count } = docSnap.data();

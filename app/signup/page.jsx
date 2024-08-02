@@ -1,13 +1,13 @@
 "use client";
 import { useState } from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import { useCreateUserWithEmailAndPassword, useSendEmailVerification } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/config';
-import { Box, Typography, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from '../components/ThemeToggle';
 import SignupForm from '../components/SignUpForm';
 import AuthButtons from '../components/AuthButtons';
-import { GoogleAuthProvider, RecaptchaVerifier, signInWithPopup, signInWithPhoneNumber } from 'firebase/auth';
+import { GoogleAuthProvider, RecaptchaVerifier, signInWithPopup, signInWithPhoneNumber, signInAnonymously } from 'firebase/auth';
 
 const darkModeStyles = {
   backgroundColor: '#121212',
@@ -49,11 +49,23 @@ export default function Signup() {
     }
   };
 
-  const handleGoogleSignUp = async () => {
+  const handleGoogleAuth = async () => {
+    console.log('Google Auth button clicked');
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
     router.push('/home');
   };
+  
+  const handleAnonAuth = async () => {
+    console.log('Anonymous Auth button clicked');
+    try {
+      await signInAnonymously(auth);
+      router.push('/home');
+    } catch (error) {
+      console.error('Error signing in anonymously:', error.message);
+    }
+  };
+  
 
   const handlePhoneSignUp = async () => {
     try {
@@ -63,7 +75,7 @@ export default function Signup() {
       await confirmationResult.confirm(verificationCode);
       router.push('/home');
     } catch (error) {
-      console.error('Error signing up with phone number:', error.message);
+      console.error('Error signing in with phone number:', error.message);
     }
   };
 
@@ -101,8 +113,8 @@ export default function Signup() {
         Already have an account? Login
       </Button>
       <AuthButtons
-        handleGoogleSignUp={handleGoogleSignUp}
-        handlePhoneSignUp={handlePhoneSignUp}
+        handleGoogleAuth={handleGoogleAuth}
+        handleAnonAuth={handleAnonAuth}
       />
     </Box>
   );
