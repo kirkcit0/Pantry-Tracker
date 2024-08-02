@@ -23,13 +23,13 @@ const RateLimitChecker = () => {
 
   return (
     <Box>
-      <Button 
+      {/* <Button 
         variant="contained" 
         onClick={handleCheckRateLimit} 
         disabled={loading}
       >
         {loading ? 'Loading...' : 'Check Rate Limit'}
-      </Button>
+      </Button> */}
       {error && (
         <Typography color="error" mt={2}>{error}</Typography>
       )}
